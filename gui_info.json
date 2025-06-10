@@ -1,0 +1,21 @@
+{
+    "Te cuesta dormir ultimamente?": "gifs/ansiedad1.gif",
+    "Te sientes inquieto o acelerado?": "gifs/ansiedad2.gif",
+    "Te cuesta concentrarte en tareas sencillas?": "gifs/ansiedad3.gif",
+
+    "Te sientes sin ganas de hacer cosas?": "gifs/tristeza1.gif",
+    "Lloras con frecuencia sin razon clara?": "gifs/tristeza2.gif",
+    "Sientes que nada te entusiasma ultimamente?": "gifs/tristeza3.gif",
+
+    "Sientes mucha presion por tus responsabilidades?": "gifs/estres1.gif",
+    "Tienes dolores fisicos sin causa medica clara?": "gifs/estres2.gif",
+    "Te sientes al limite todo el tiempo?": "gifs/estres3.gif",
+
+    "Has perdido el interes por actividades que antes disfrutabas?": "gifs/depresion1.gif",
+    "Te sientes sin valor o con culpa constante?": "gifs/depresion2.gif",
+    "Tienes pensamientos negativos recurrentes?": "gifs/depresion3.gif",
+
+    "Te sientes constantemente cansado a pesar de descansar?": "gifs/agotamiento1.gif",
+    "Sientes que no puedes más con tus responsabilidades?": "gifs/agotamiento2.gif",
+    "Te cuesta encontrar motivación incluso para lo básico?": "gifs/agotamiento3.gif"
+}
