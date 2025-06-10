@@ -1,33 +1,49 @@
 import subprocess
 from pyswip import Prolog
 import os
+from collections import Counter
 
-# Rutas relativas a los archivos Prolog
 BASE_FILE = "base_conocimientos.pl"
 MOTOR_FILE = "motor_inferencias.pl"
 
-# Cargar preguntas desde Prolog
-def obtener_preguntas():
+def ordenar_preguntas_por_frecuencia(conocimientos):
+    contador = Counter()
+    for sintomas in conocimientos.values():
+        contador.update(sintomas)
+
+    preguntas_ordenadas = sorted(contador.keys(), key=lambda x: -contador[x])
+    return preguntas_ordenadas
+
+def cargar_conocimientos():
     prolog = Prolog()
     prolog.consult(BASE_FILE)
-    preguntas = set()
-    for resultado in prolog.query("conocimiento(_, Pregs)"):
-        for p in resultado["Pregs"]:
-            if isinstance(p, bytes):
-                preguntas.add(p.decode("utf-8"))
-            else:
-                preguntas.add(str(p))
-    return list(preguntas)
+    conocimientos = {}
+    for resultado in prolog.query("conocimiento(E, Pregs)"):
+        emocion = str(resultado["E"])
+        sintomas = [p.decode("utf-8") if isinstance(p, bytes) else str(p) for p in resultado["Pregs"]]
+        conocimientos[emocion] = set(sintomas)
+    return conocimientos
 
-# Preguntar al usuario
-def recoger_respuestas(preguntas):
+def recoger_respuestas_dinamico(preguntas, conocimientos):
     respuestas = []
     print("Por favor responde con 's' para SÍ o cualquier otra cosa para NO.\n")
+
     for p in preguntas:
         r = input(p + " ")
         if r.lower() == "s":
             respuestas.append(p)
+
+            # Verifica si ya se cumple alguna emoción
+            for emocion, sintomas in conocimientos.items():
+                if sintomas.issubset(set(respuestas)):
+                    print(f"\n✅ Todos los síntomas de '{emocion}' se han confirmado.")
+                    return respuestas  # Se detiene aquí si ya hay diagnóstico completo
+
     return respuestas
+
+# Cargar preguntas desde Prolog
+def obtener_preguntas(conocimientos):
+    return ordenar_preguntas_por_frecuencia(conocimientos)
 
 # Ejecutar Prolog con las respuestas
 def ejecutar_motor(respuestas):
@@ -56,9 +72,9 @@ def mostrar_resultado(resultado):
     else:
         print("\n⚠️ No se pudo determinar un diagnóstico claro.")
 
-# Programa principal
 if __name__ == "__main__":
-    preguntas = obtener_preguntas()
-    respuestas = recoger_respuestas(preguntas)
+    conocimientos = cargar_conocimientos()
+    preguntas = obtener_preguntas(conocimientos)
+    respuestas = recoger_respuestas_dinamico(preguntas, conocimientos)
     resultado = ejecutar_motor(respuestas)
     mostrar_resultado(resultado)

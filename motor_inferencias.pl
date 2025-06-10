@@ -1,15 +1,11 @@
-% motor_inferencias.pl
-
 :- dynamic respuesta/1.
 :- consult('base_conocimientos.pl').
 
-% Agregar respuestas desde Python
 agregar_respuestas([]).
 agregar_respuestas([R|Rs]) :-
     assertz(respuesta(R)),
     agregar_respuestas(Rs).
 
-% Diagnóstico e impresión
 iniciar :-
     encontrar_diagnostico,
     halt.
@@ -17,8 +13,8 @@ iniciar :-
 encontrar_diagnostico :-
     findall(R, respuesta(R), Respuestas),
     posible_diagnostico(E, Respuestas),
-    recomendacion(E, R),
-    format('~w|~w', [E, R]),
+    recomendacion(E, Reco),
+    format('~w|~w', [E, Reco]),
     !.
 
 encontrar_diagnostico :-
