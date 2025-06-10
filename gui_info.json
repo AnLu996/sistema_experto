@@ -16,6 +16,30 @@
     "Tienes pensamientos negativos recurrentes?": "gifs/depresion3.gif",
 
     "Te sientes constantemente cansado a pesar de descansar?": "gifs/agotamiento1.gif",
-    "Sientes que no puedes más con tus responsabilidades?": "gifs/agotamiento2.gif",
-    "Te cuesta encontrar motivación incluso para lo básico?": "gifs/agotamiento3.gif"
+    "Sientes que no puedes mas con tus responsabilidades?": "gifs/agotamiento2.gif",
+    "Te cuesta encontrar motivacion incluso para lo basico?": "gifs/agotamiento3.gif",
+
+    "Sientes que no tienes con quien hablar realmente?": "gifs/soledad1.gif",
+    "Te sientes desconectado incluso rodeado de personas?": "gifs/soledad2.gif",
+    "Pasas mucho tiempo solo y no por decision propia?": "gifs/soledad3.gif",
+
+    "Sientes que tus esfuerzos no rinden frutos?": "gifs/frustracion1.gif",
+    "Te enojas con facilidad por cosas pequenas?": "gifs/frustracion2.gif",
+    "Sientes que siempre chocas contra una pared?": "gifs/frustracion3.gif",
+
+    "Te preocupa constantemente que algo malo suceda?": "gifs/miedo1.gif",
+    "Evitas situaciones por temor al resultado?": "gifs/miedo2.gif",
+    "Tu corazon se acelera sin motivo claro?": "gifs/miedo3.gif",
+
+    "Sientes que nada de lo que haces te estimula?": "gifs/aburrimiento1.gif",
+    "Te cuesta encontrar algo que te motive o interese?": "gifs/aburrimiento2.gif",
+    "El tiempo parece pasar muy lento ultimamente?": "gifs/aburrimiento3.gif",
+
+    "Te sientes mal por algo que hiciste o dijiste?": "gifs/culpa1.gif",
+    "No puedes dejar de pensar en un error pasado?": "gifs/culpa2.gif",
+    "Sientes que lastimaste a alguien aunque no fuera tu intencion?": "gifs/culpa3.gif",
+
+    "Te preocupa lo que otros piensen de ti constantemente?": "gifs/verguenza1.gif",
+    "Evitas hablar o actuar por miedo a hacer el ridiculo?": "gifs/verguenza2.gif",
+    "Te sientes juzgado incluso sin razon aparente?": "gifs/verguenza3.gif"
 }

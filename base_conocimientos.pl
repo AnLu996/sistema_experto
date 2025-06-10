@@ -1,6 +1,6 @@
 % base_conocimientos.pl
 
-% Emociones y sus síntomas (en forma de preguntas)
+% Emociones y sus sintomas (en forma de preguntas)
 conocimiento(ansiedad, [
     "Te cuesta dormir ultimamente?",
     "Te sientes inquieto o acelerado?",
@@ -27,40 +27,40 @@ conocimiento(depresion, [
 
 conocimiento(agotamiento, [
     "Te sientes constantemente cansado a pesar de descansar?",
-    "Sientes que no puedes más con tus responsabilidades?",
-    "Te cuesta encontrar motivación incluso para lo básico?"
+    "Sientes que no puedes mas con tus responsabilidades?",
+    "Te cuesta encontrar motivacion incluso para lo basico?"
 ]).
 
 % conocimiento(soledad, [
-%     "Sientes que no tienes con quién hablar realmente?",
+%     "Sientes que no tienes con quien hablar realmente?",
 %     "Te sientes desconectado incluso rodeado de personas?",
-%     "Pasas mucho tiempo solo y no por decisión propia?"
+%     "Pasas mucho tiempo solo y no por decision propia?"
 % ]).
-% 
+%
 % conocimiento(frustracion, [
 %     "Sientes que tus esfuerzos no rinden frutos?",
-%     "Te enojas con facilidad por cosas pequeñas?",
+%     "Te enojas con facilidad por cosas pequenas?",
 %     "Sientes que siempre chocas contra una pared?"
 % ]).
-% 
+%
 % conocimiento(miedo, [
 %     "Te preocupa constantemente que algo malo suceda?",
 %     "Evitas situaciones por temor al resultado?",
 %     "Tu corazon se acelera sin motivo claro?"
 % ]).
-% 
+%
 % conocimiento(aburrimiento, [
 %     "Sientes que nada de lo que haces te estimula?",
 %     "Te cuesta encontrar algo que te motive o interese?",
 %     "El tiempo parece pasar muy lento ultimamente?"
 % ]).
-% 
+%
 % conocimiento(culpa, [
 %     "Te sientes mal por algo que hiciste o dijiste?",
 %     "No puedes dejar de pensar en un error pasado?",
 %     "Sientes que lastimaste a alguien aunque no fuera tu intencion?"
 % ]).
-% 
+%
 % conocimiento(verguenza, [
 %     "Te preocupa lo que otros piensen de ti constantemente?",
 %     "Evitas hablar o actuar por miedo a hacer el ridiculo?",
@@ -74,19 +74,19 @@ recomendacion(estres, "Podrias tener estres acumulado. Prueba ejercicios de resp
 recomendacion(depresion, "Tal vez estes experimentando signos de depresion leve. Busca apoyo emocional y considera consultar a un profesional.").
 recomendacion(agotamiento, "El agotamiento emocional es serio. Tomate un tiempo para descansar y desconectarte si puedes, y no dudes en pedir ayuda.").
 
-% recomendacion(soledad, "Sentirse solo es más común de lo que parece. Busca reconectar con alguien cercano o únete a una actividad grupal.").
-% recomendacion(frustracion, "La frustración puede aliviarse reformulando tus metas o tomando pausas. Hablarlo con alguien puede darte otra perspectiva.").
+% recomendacion(soledad, "Sentirse solo es mas comun de lo que parece. Busca reconectar con alguien cercano o unete a una actividad grupal.").
+% recomendacion(frustracion, "La frustracion puede aliviarse reformulando tus metas o tomando pausas. Hablarlo con alguien puede darte otra perspectiva.").
 % recomendacion(miedo, "Reconocer tus miedos es el primer paso. Respira hondo y analiza si ese temor es real o imaginado.").
-% recomendacion(aburrimiento, "Intenta probar algo nuevo o cambiar tu rutina diaria. A veces un pequeño cambio despierta motivación.").
-% recomendacion(culpa, "Habla con la persona involucrada si puedes, y perdónate a ti mismo. Todos cometemos errores.").
-% recomendacion(verguenza, "Recuerda que todos cometemos errores. Practicar la autoaceptación puede ayudarte a soltar esa carga.").
+% recomendacion(aburrimiento, "Intenta probar algo nuevo o cambiar tu rutina diaria. A veces un pequeno cambio despierta motivacion.").
+% recomendacion(culpa, "Habla con la persona involucrada si puedes, y perdonate a ti mismo. Todos cometemos errores.").
+% recomendacion(verguenza, "Recuerda que todos cometemos errores. Practicar la autoaceptacion puede ayudarte a soltar esa carga.").
 
 % Motor de inferencia
 posible_diagnostico(Emocion, SintomasUsuario) :-
     conocimiento(Emocion, SintomasRequeridos),
     subset(SintomasRequeridos, SintomasUsuario).
 
-% Verifica que todos los síntomas requeridos estén presentes
+% Verifica que todos los sintomas requeridos esten presentes
 subset([], _).
 subset([H|T], Lista) :-
     member(H, Lista),
