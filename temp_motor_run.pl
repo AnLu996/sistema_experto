@@ -1,3 +1,3 @@
 :- consult('motor_inferencias.pl').
-:- agregar_respuestas(["Te cuesta dormir ultimamente?","Te sientes inquieto o acelerado?","Te cuesta concentrarte en tareas sencillas?","Te sientes sin ganas de hacer cosas?","Lloras con frecuencia sin razon clara?","Sientes que nada te entusiasma ultimamente?","Sientes mucha presion por tus responsabilidades?","Tienes dolores fisicos sin causa medica clara?","Te sientes al limite todo el tiempo?","Has perdido el interes por actividades que antes disfrutabas?","Te sientes sin valor o con culpa constante?","Tienes pensamientos negativos recurrentes?","Te sientes constantemente cansado a pesar de descansar?","Sientes que no puedes más con tus responsabilidades?","Te cuesta encontrar motivación incluso para lo básico?"]).
+:- agregar_respuestas(["Te cuesta dormir ultimamente?","Tienes dolores fisicos sin causa medica clara?","Te sientes al limite todo el tiempo?","Sientes mucha presion por tus responsabilidades?"]).
 :- iniciar.
