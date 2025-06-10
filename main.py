@@ -1,73 +1,64 @@
-import cv2
+import subprocess
+from pyswip import Prolog
+import os
 
-# Preguntas y etiquetas
-preguntas = {
-    "ansiedad": [
-        "¿Te cuesta dormir últimamente?",
-        "¿Te sientes inquieto o acelerado?"
-    ],
-    "tristeza": [
-        "¿Te sientes sin ganas de hacer cosas?",
-        "¿Lloras con frecuencia sin razón clara?"
-    ],
-    "estres": [
-        "¿Sientes mucha presión por tus responsabilidades?",
-        "¿Tienes dolores físicos sin causa médica clara?"
-    ]
-}
+# Rutas relativas a los archivos Prolog
+BASE_FILE = "base_conocimientos.pl"
+MOTOR_FILE = "motor_inferencias.pl"
 
-respuestas = []
+# Cargar preguntas desde Prolog
+def obtener_preguntas():
+    prolog = Prolog()
+    prolog.consult(BASE_FILE)
+    preguntas = set()
+    for resultado in prolog.query("conocimiento(_, Pregs)"):
+        for p in resultado["Pregs"]:
+            if isinstance(p, bytes):
+                preguntas.add(p.decode("utf-8"))
+            else:
+                preguntas.add(str(p))
+    return list(preguntas)
 
-recomendaciones = {
-    "ansiedad": "Puede que estés con ansiedad leve. Trata de hablar con alguien de confianza o caminar al aire libre.",
-    "tristeza": "Podrías estar pasando por tristeza. Intenta escribir cómo te sientes o hablar con alguien cercano.",
-    "estres": "Podrías tener estrés acumulado. Prueba ejercicios de respiración o pausas activas.",
-    "ninguno": "No se pudo determinar un estado claro. Considera buscar ayuda profesional."
-}
+# Preguntar al usuario
+def recoger_respuestas(preguntas):
+    respuestas = []
+    print("Por favor responde con 's' para SÍ o cualquier otra cosa para NO.\n")
+    for p in preguntas:
+        r = input(p + " ")
+        if r.lower() == "s":
+            respuestas.append(p)
+    return respuestas
 
-def mostrar_pantalla(texto, altura=400, anchura=700):
-    fondo = 255 * np.ones((altura, anchura, 3), dtype=np.uint8)
-    y = 80
-    for linea in texto.split('\n'):
-        cv2.putText(fondo, linea, (40, y), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 0, 0), 2)
-        y += 50
-    return fondo
+# Ejecutar Prolog con las respuestas
+def ejecutar_motor(respuestas):
+    # Crear un archivo temporal que ejecute el motor con las respuestas
+    script = "temp_motor_run.pl"
+    with open(script, "w", encoding="utf-8") as f:
+        f.write(":- consult('{}').\n".format(MOTOR_FILE))
+        f.write(":- agregar_respuestas([{}]).\n".format(
+            ",".join(['"{}"'.format(r) for r in respuestas])
+        ))
+        f.write(":- iniciar.\n")
+    
+    # Ejecutar el archivo con SWI-Prolog
+    try:
+        resultado = subprocess.check_output(["swipl", "-q", "-f", script], universal_newlines=True)
+        return resultado.strip()
+    except subprocess.CalledProcessError as e:
+        return "Error en la ejecución del motor de inferencia."
 
-def preguntar(pregunta):
-    pantalla = mostrar_pantalla(f"{pregunta}\n\nPresiona 's' para Sí, 'n' para No.")
-    cv2.imshow("MentalCare", pantalla)
-    key = cv2.waitKey(0)
-    return chr(key) == 's'
+# Mostrar resultado
+def mostrar_resultado(resultado):
+    if "|" in resultado:
+        emocion, recomendacion = resultado.split("|", 1)
+        print(f"\n🧠 Diagnóstico: {emocion}")
+        print(f"💡 Recomendación: {recomendacion}")
+    else:
+        print("\n⚠️ No se pudo determinar un diagnóstico claro.")
 
-def diagnosticar(respuestas):
-    conteo = {"ansiedad": 0, "tristeza": 0, "estres": 0}
-    for tag, preguntas_tag in preguntas.items():
-        for p in preguntas_tag:
-            if p in respuestas:
-                conteo[tag] += 1
-
-    max_estado = max(conteo, key=conteo.get)
-    if conteo[max_estado] >= 2:
-        return max_estado
-    return "ninguno"
-
-def mostrar_resultado(estado):
-    mensaje = f"Diagnóstico: {estado.upper()}\n\nSugerencia:\n{recomendaciones[estado]}"
-    pantalla = mostrar_pantalla(mensaje, altura=500)
-    cv2.imshow("MentalCare", pantalla)
-    cv2.waitKey(0)
-
-import numpy as np
-
-def main():
-    for tag, lista_preguntas in preguntas.items():
-        for p in lista_preguntas:
-            if preguntar(p):
-                respuestas.append(p)
-
-    estado = diagnosticar(respuestas)
-    mostrar_resultado(estado)
-    cv2.destroyAllWindows()
-
+# Programa principal
 if __name__ == "__main__":
-    main()
+    preguntas = obtener_preguntas()
+    respuestas = recoger_respuestas(preguntas)
+    resultado = ejecutar_motor(respuestas)
+    mostrar_resultado(resultado)

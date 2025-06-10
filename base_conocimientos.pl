@@ -1,62 +1,93 @@
-import cv2
-import numpy as np
-import subprocess
+% base_conocimientos.pl
 
-# Preguntas directamente mapeadas al Prolog
-preguntas = [
-    "¿Te cuesta dormir últimamente?",
-    "¿Te sientes inquieto o acelerado?",
-    "¿Te sientes sin ganas de hacer cosas?",
-    "¿Lloras con frecuencia sin razón clara?",
-    "¿Sientes mucha presión por tus responsabilidades?",
-    "¿Tienes dolores físicos sin causa médica clara?"
-]
+% Emociones y sus síntomas (en forma de preguntas)
+conocimiento(ansiedad, [
+    "Te cuesta dormir últimamente?",
+    "Te sientes inquieto o acelerado?",
+    "Te cuesta concentrarte en tareas sencillas?"
+]).
 
-respuestas_afirmativas = []
+conocimiento(tristeza, [
+    "Te sientes sin ganas de hacer cosas?",
+    "Lloras con frecuencia sin razón clara?",
+    "Sientes que nada te entusiasma últimamente?"
+]).
 
-def mostrar_pantalla(texto, altura=400, anchura=800):
-    fondo = 255 * np.ones((altura, anchura, 3), dtype=np.uint8)
-    y = 100
-    for linea in texto.split('\n'):
-        cv2.putText(fondo, linea, (50, y), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (50, 50, 50), 2)
-        y += 50
-    return fondo
+conocimiento(estres, [
+    "Sientes mucha presión por tus responsabilidades?",
+    "Tienes dolores físicos sin causa médica clara?",
+    "Te sientes al límite todo el tiempo?"
+]).
 
-def preguntar(pregunta):
-    pantalla = mostrar_pantalla(f"{pregunta}\n\nPresiona 's' para Sí o 'n' para No.")
-    cv2.imshow("MentalCare", pantalla)
-    key = cv2.waitKey(0)
-    return chr(key) == 's'
+conocimiento(depresion, [
+    "Has perdido el interés por actividades que antes disfrutabas?",
+    "Te sientes sin valor o con culpa constante?",
+    "Tienes pensamientos negativos recurrentes?"
+]).
 
-def escribir_script_respuestas(respuestas):
-    script = ":- consult('motor_inferencias.pl').\n"
-    for r in respuestas:
-        script += f":- agregar_respuesta(\"{r}\").\n"
-    script += ":- iniciar.\n"
+conocimiento(agotamiento, [
+    "Te sientes constantemente cansado a pesar de descansar?",
+    "Sientes que no puedes más con tus responsabilidades?",
+    "Te cuesta encontrar motivación incluso para lo básico?"
+]).
 
-    with open("consulta.pl", "w", encoding="utf-8") as f:
-        f.write(script)
+conocimiento(soledad, [
+    "Sientes que no tienes con quién hablar realmente?",
+    "Te sientes desconectado incluso rodeado de personas?",
+    "Pasas mucho tiempo solo y no por decisión propia?"
+]).
 
-def obtener_diagnostico():
-    result = subprocess.run(["swipl", "-q", "-f", "consulta.pl"], capture_output=True, text=True)
-    return result.stdout.strip()
+conocimiento(frustracion, [
+    "Sientes que tus esfuerzos no rinden frutos?",
+    "Te enojas con facilidad por cosas pequeñas?",
+    "Sientes que siempre chocas contra una pared?"
+]).
 
-def mostrar_resultado(texto):
-    diagnostico, recomendacion = texto.split("|")
-    mensaje = f"Diagnóstico: {diagnostico.upper()}\n\nSugerencia:\n{recomendacion}"
-    pantalla = mostrar_pantalla(mensaje, altura=500)
-    cv2.imshow("MentalCare", pantalla)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+conocimiento(miedo, [
+    "Te preocupa constantemente que algo malo suceda?",
+    "Evitas situaciones por temor al resultado?",
+    "Tu corazón se acelera sin motivo claro?"
+]).
 
-def main():
-    for p in preguntas:
-        if preguntar(p):
-            respuestas_afirmativas.append(p)
+conocimiento(aburrimiento, [
+    "Sientes que nada de lo que haces te estimula?",
+    "Te cuesta encontrar algo que te motive o interese?",
+    "El tiempo parece pasar muy lento últimamente?"
+]).
 
-    escribir_script_respuestas(respuestas_afirmativas)
-    resultado = obtener_diagnostico()
-    mostrar_resultado(resultado)
+conocimiento(culpa, [
+    "Te sientes mal por algo que hiciste o dijiste?",
+    "No puedes dejar de pensar en un error pasado?",
+    "Sientes que lastimaste a alguien aunque no fuera tu intención?"
+]).
 
-if __name__ == "__main__":
-    main()
+conocimiento(verguenza, [
+    "Te preocupa lo que otros piensen de ti constantemente?",
+    "Evitas hablar o actuar por miedo a hacer el ridículo?",
+    "Te sientes juzgado incluso sin razón aparente?"
+]).
+
+% Recomendaciones por emoción
+recomendacion(ansiedad, "Puede que estés con ansiedad leve. Trata de hablar con alguien de confianza o caminar al aire libre.").
+recomendacion(tristeza, "Podrías estar pasando por tristeza. Intenta escribir cómo te sientes o hablar con alguien cercano.").
+recomendacion(estres, "Podrías tener estrés acumulado. Prueba ejercicios de respiración o pausas activas.").
+recomendacion(depresion, "Tal vez estés experimentando signos de depresión leve. Busca apoyo emocional y considera consultar a un profesional.").
+recomendacion(agotamiento, "El agotamiento emocional es serio. Tómate un tiempo para descansar y desconectarte si puedes, y no dudes en pedir ayuda.").
+
+recomendacion(soledad, "Sentirse solo es más común de lo que parece. Busca reconectar con alguien cercano o únete a una actividad grupal.").
+recomendacion(frustracion, "La frustración puede aliviarse reformulando tus metas o tomando pausas. Hablarlo con alguien puede darte otra perspectiva.").
+recomendacion(miedo, "Reconocer tus miedos es el primer paso. Respira hondo y analiza si ese temor es real o imaginado.").
+recomendacion(aburrimiento, "Intenta probar algo nuevo o cambiar tu rutina diaria. A veces un pequeño cambio despierta motivación.").
+recomendacion(culpa, "Habla con la persona involucrada si puedes, y perdónate a ti mismo. Todos cometemos errores.").
+recomendacion(verguenza, "Recuerda que todos cometemos errores. Practicar la autoaceptación puede ayudarte a soltar esa carga.").
+
+% Motor de inferencia
+posible_diagnostico(Emocion, SintomasUsuario) :-
+    conocimiento(Emocion, SintomasRequeridos),
+    subset(SintomasRequeridos, SintomasUsuario).
+
+% Verifica que todos los síntomas requeridos estén presentes
+subset([], _).
+subset([H|T], Lista) :-
+    member(H, Lista),
+    subset(T, Lista).

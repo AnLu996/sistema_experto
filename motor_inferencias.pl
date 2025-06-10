@@ -1,31 +1,25 @@
-
 % motor_inferencias.pl
+
 :- dynamic respuesta/1.
 :- consult('base_conocimientos.pl').
 
+% Agregar respuestas desde Python
+agregar_respuestas([]).
+agregar_respuestas([R|Rs]) :-
+    assertz(respuesta(R)),
+    agregar_respuestas(Rs).
+
+% Diagnóstico e impresión
 iniciar :-
-    hacer_preguntas,
     encontrar_diagnostico,
-    limpiar.
-
-hacer_preguntas :-
-    sintoma(_, Pregunta),
-    format("~w (s/n): ", [Pregunta]),
-    read(Resp),
-    procesar_respuesta(Pregunta, Resp),
-    fail.
-hacer_preguntas.
-
-procesar_respuesta(Pregunta, s) :- assert(respuesta(Pregunta)).
-procesar_respuesta(_, _).
+    halt.
 
 encontrar_diagnostico :-
-    diagnostico(Estado),
-    recomendacion(Estado, Reco),
-    format("Diagnóstico: ~w~n", [Estado]),
-    format("Sugerencia: ~w~n", [Reco]),
+    findall(R, respuesta(R), Respuestas),
+    posible_diagnostico(E, Respuestas),
+    recomendacion(E, R),
+    format('~w|~w', [E, R]),
     !.
-encontrar_diagnostico :-
-    write("No se pudo determinar un estado claro. Considera buscar ayuda profesional.").
 
-limpiar :- retractall(respuesta(_)).
+encontrar_diagnostico :-
+    write('ninguno|No se pudo determinar un estado claro. Considera buscar ayuda profesional.').
